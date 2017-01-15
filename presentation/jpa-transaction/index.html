@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>JPA & Transaction</title>
+
+    <link rel="stylesheet" href="/presentation/css/reveal.css">
+    <link rel="stylesheet" href="/presentation/css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="/presentation/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? '/presentation/css/print/pdf.css' : '/presentation/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    # What?
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    Angular test case
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    Best practice(=삽질)
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    <img src="./sap.jpg"/>
+                </script>
+            </section>
+        </section>
+
+
+        <section data-markdown>
+            <script type="text/template">
+                0. 목표
+                1. ntree2에서 사용하는 쿼리작성법
+                2. Spring & JPA에서 트랜잭션 만드는 방법
+                3. 결론
+            </script>
+        </section>
+
+
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    ## 목표
+
+                    - JPA(영속성 컨텍스트, Persistance Context)
+
+                        -> Database
+
+                    - 원치 않는 데이터 변경이 일어나는 경우 방지
+                </script>
+            </section>
+        </section>
+
+
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    ## ntree2에서 사용하는 쿼리작성법
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    데이터 조회 방법
+
+                    mybatis,
+
+                    JPA(hibernate)
+                        - queryDsl : JPAQuery, QueryDslPredicateExecutor
+
+                    Spring-data-jpa
+                        - @Query : JPQL or native
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    ```java
+                    JPAQuery query = new JPAQuery(ntree2EntityManager.getEntityManager());
+
+                    // DSL 방식
+                    query
+                        .from(QComPeopleEntity.comPeopleEntity)
+                        .where(QComPeopleEntity.comPeopleEntity.empNo.eq(empNo))
+                        .list(QComPeopleEntity.comPeopleEntity)
+
+                    // QueryDslPredicateExecutor 사용
+                    comPeopleRepository.findAll(QComPeopleEntity.comPeopleEntity.empNo.eq(empNo));
+                    ```
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    ```java
+                    // spring-data-jpa method 명명 규칙 사용
+                    public List<%gt;ComPeopleEntity%lt;> findBySid(long sid);
+
+                    // @Query 사용
+                    @Quert(value = "SELECT p FROM ComPeopleEntity p WHERE p.empNo = ?!")
+                    public List<%gt;ComPeopleEntity%lt;> findAll(long sid);
+
+                    // @Query 사용 : native query
+                    @Quert(value = "SELECT p.* FROM COM_PEOPLE p WHERE p.emp_no = ?!", native = true)
+                    public List<%gt;ComPeopleEntity%lt;> findAll(long sid);
+                    ```
+                </script>
+            </section>
+        </section>
+
+
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    ## Spring & JPA에서 트랜잭션 만드는 방법
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    JDBC :
+
+                    ```java
+                    try {
+                        connection.setAutoCommit(false);
+                        connection.commit();
+                        connection.setAutoCommit(true);
+                    } catch (SQLException e) {
+                        // Error handling
+                    }
+                    ```
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    Spring :
+
+                    ```java
+                    // javax.transaction.Transactional
+                    // org.springframework.transaction.annotation.Transactional
+
+                    @Transactional(readOnly = true)
+                    @Service
+                    public class ComPeopleService {
+                        @Transactional
+                        public void updatePeople(ComPeopleDto comPeopleDto) {
+                            // update people...
+                        }
+
+                        // More implementations...
+                    }
+                    ```
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    ```java
+                    JPAQuery query = new JPAQuery(entityManager);
+
+                    entityManager.begin();
+
+                    // update people...
+
+                    entityManager.commit();
+                    ```
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    ```java
+                    comPeopleRepository.findAll();
+
+                    @Repository
+                    @Transactional(readOnly = true)
+                    public class SimpleJpaRepository%gt;T, ID extends Serializable> implements JpaRepository%gt;T, ID%lt;,
+                    JpaSpecificationExecutor%gt;T%lt; {
+                    ```
+                </script>
+            </section>
+
+            <section data-markdown>
+                <script type="text/template">
+                    ```java
+                    @Service
+                    public ComPeopleService() {
+
+                        // 생략!
+
+                        @PersistenceContext(unitName="mainPersistenceUnit")
+                        private EntityManager entityManager;
+
+                        public List%gt;ComPeopleEntity%lt; getPerson(int empNo) {
+                            JPAQuery query = new JPAQuery(entityManager);
+
+                            ComPeopleEntity entity = query
+                                                        .from(QComPeopleEntity.comPeopleEntity)
+                                                        .where(QComPeopleEntity.comPeopleEntity.empNo.eq(empNo))
+                                                        .list(QComPeopleEntity.comPeopleEntity).get(0);
+
+                            entity.setName("아무개");
+
+                            SomeEntity someEntity = this.getSomeEntity();
+
+                            ...
+                        }
+
+                        @Transactional
+                        public SomeEntity getSomeEntity() {
+                            // ... codes
+                        }
+                    }
+                    ```
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    답 : entity가 변경되고, DB에 반영 됩니다. (plush)
+
+                    원인 : entityManager(persistence context)가 사라지지 않고, 재사용됨
+                    [link](http://netframework.tistory.com/entry/Spring%EC%97%90%EC%84%9C-PersistenceContext%EC%9D%98-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC)
+
+                    OSIV 사용할 때, 컨트롤러에서 트랜잭션과 관련된 이슈와 유사
+                    [link](https://oss.navercorp.com/playsw/informations/blob/master/documents/04-tech/JPA-hibernate/persistence_context.asc)
+                </script>
+            </section>
+        </section>
+
+
+        <section>
+            <section data-markdown>
+                <script type="text/template">
+                    ## 결론
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    JPA에서 persistence context에서 DB로의 변경사항 전파는
+                    .flush()가 호출되었을 때 일어난다.
+
+                    flush는 프로그래머가 직접 호출하거나, Transaction이 끝날 때 호출된다.
+                    hibernate는 connection.commit() 호출 직전에 flush()를 호출함.
+                </script>
+            </section>
+            <section data-markdown>
+                <script type="text/template">
+                    entityManager를 직접 가져와 쿼리를 실행할 때는 원치 않는 DB 변경이 일어날 수 있다.
+
+                    명시적으로 Transaction을 readOnly로 설정하거나
+                    entity의 데이터 변경은 update, insert 쿼리를 만들 때만 쓰자
+                </script>
+            </section>
+        </section>
+    </div>
+</div>
+
+<script src="/presentation/lib/js/head.min.js"></script>
+<script src="/presentation/js/reveal.js"></script>
+
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+        width: 960,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            {src: '/presentation/plugin/markdown/marked.js'},
+            {src: '/presentation/plugin/markdown/markdown.js'},
+            {src: '/presentation/plugin/notes/notes.js', async: true},
+            {
+                src: '/presentation/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
