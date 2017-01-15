@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Machine Learning</title>
+
+		<link rel="stylesheet" href="/presentation/css/reveal.css">
+		<link rel="stylesheet" href="/presentation/css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/presentation/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '/presentation/css/print/pdf.css' : '/presentation/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+			    <script type="text/template">
+            # Machine Learning
+			    </script>
+				</section>
+				<section data-markdown>
+			    <script type="text/template">
+						0. Intro
+						1. ML VS EXPLICIT
+						2. Linear regression				
+						3. Tensorflow
+						4. Conclusion
+					</script>
+				</section>
+				<section>
+				<section data-markdown>
+			    <script type="text/template">
+						# Intro
+				</script>
+				</section>
+				<section>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/NrmMk1Myrxc" frameborder="0" allowfullscreen></iframe>				</section>
+				<section>
+					<img src="./handwriting.jpeg"/>
+					<img src="./handwriting2.jpeg"/>
+					<img src="./handwriting3.jpeg"/>
+				</section>																
+				</section>
+				</section>
+				<section>
+					<section data-markdown>
+				    <script type="text/template">
+							# ML VS EXPLICIT
+						</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+							Machine learning is the subfield of computer science that "gives computers the ability to learn without being explicitly programmed"
+
+							(Arthur Samuel, 1959)
+
+							https://en.wikipedia.org/wiki/Machine_learning
+						</script>
+					</section>					
+					<section data-markdown>
+						<script type="text/template">
+						![](./distance_price.png)
+
+						HOW TO SOLVE THIS PROBLEM
+						</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					 ![](./anwser.png)
+					 
+					 Y = WX + B
+					 
+					 EXPLICT : YOU'RE JUST COMPUTER. JUST CACULATE!
+
+					 ML : YOU'RE SO SMART. FIND IT BY YOUR SELF!
+					</script>
+					</section>
+					<section>
+						<img src="./how.png"/>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					 EXPLICT : ONE SHOT ONE KILL!
+
+					 ML : I COULD MAKE MISTAKE. 
+					 
+					   BUT, I CAN DO IT TOMORROW.
+					</script>										
+					</section>
+				</section>	
+				<section>
+					<section data-markdown>
+				    <script type="text/template">
+							# Linear regression
+						</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					종속 변수 y와 한 개 이상의 독립 변수 (또는 설명 변수) X와의
+					
+					선형 상관 관계를 모델링하는 회귀분석 기법이다.
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					선형 회귀는 선형 예측 함수를 사용해 회귀식을 모델링하며, 
+					
+					알려지지 않은 파라미터는 데이터로부터 추정한다.
+					
+					이렇게 만들어진 회귀식을 선형 모델이라고 한다.
+
+					???
+					
+					https://ko.wikipedia.org/wiki/선형_회귀
+					</script>					
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					# Y = WX + B
+					JUST FIND W & B
+
+					HOW??
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					SET RANDOM VALUE TO X & B
+
+					(Are you kidding me?)
+
+					![](./step_1.png)
+
+					w = 30.0606308, b = 20.1068325
+					</script>
+					</section>	
+					<section data-markdown>
+				    <script type="text/template">
+					WHAT ARE YOU DOING?
+
+					![](./step_2.png)
+
+					w = 0.08535606, b = 99.69112396
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					!
+
+					![](./step_3.png)
+
+					w = -0.07096078, b = 99.95159149
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					!!!!!!
+
+					![](./step_4.png)
+
+					w = -0.1012769, b = 100.00209808
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					HOW??
+
+					- Cost
+					- Gradient descent
+
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					# Cost
+					CostFunction
+
+					![](./cost.png)
+
+					Our Goal is minimize CostFunction Value
+
+					(Bye , I will go home)
+					</script>
+					</section>
+					<section data-markdown>
+				    <script type="text/template">
+					# Gradient Descent
+					Gradient Descent update rule
+
+					![](./descent.png)
+
+					(Bye , I should go home)
+					</script>
+					
+					</section>
+					<section >
+					More Parameters
+					<img src="./cost_graph.png"/>
+					</section>					
+					<section data-markdown>
+				    <script type="text/template">
+					![](./congratulations.png)
+										
+					Congratulation!!
+
+					We Create Model
+
+					Just coding it
+
+					</script>
+					</section>																																												
+																															
+				</section>
+				<section>
+				<section data-markdown>
+				    <script type="text/template">
+							# TensorFlow
+						</script>
+				</section>
+				</section>	
+				<section>
+				<section data-markdown>
+				    <script type="text/template">
+							# Conclusion
+					</script>
+				</section>
+				<section data-markdown>
+				    <script type="text/template">
+						![](./java.png)
+
+						I LOVE JAVA	
+					</script>
+				</section>	
+				<section data-markdown>
+				    <script type="text/template">
+						![](./hard.jpg)
+						
+						SO HARD	
+					</script>
+				</section>
+				<section data-markdown>
+				    <script type="text/template">
+						![](./with.png)
+						
+						GET THE ONEPIECE TOGETHER
+					</script>
+				</section>
+					<section data-markdown>
+				    <script type="text/template">
+					# Good Sites
+					- 모두를 위한 딥러닝
+					(https://hunkim.github.io/ml/)
+
+					- Coursera Machine Learning
+					(https://www.coursera.org/learn/machine-learning) 
+
+					</script>
+					
+					</section>												
+												
+				</section>	
+				</section>				
+			</div>
+		</div>
+
+		<script src="/presentation/lib/js/head.min.js"></script>
+		<script src="/presentation/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				width : 960,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '/presentation/plugin/markdown/marked.js' },
+					{ src: '/presentation/plugin/markdown/markdown.js' },
+					{ src: '/presentation/plugin/notes/notes.js', async: true },
+					{ src: '/presentation/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
