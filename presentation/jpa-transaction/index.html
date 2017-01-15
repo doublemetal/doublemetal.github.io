@@ -112,15 +112,15 @@
                 <script type="text/template">
                     ```java
                     // spring-data-jpa method 명명 규칙 사용
-                    public List<%gt;ComPeopleEntity%lt;> findBySid(long sid);
+                    public List<ComPeopleEntity> findBySid(long sid);
 
                     // @Query 사용
                     @Quert(value = "SELECT p FROM ComPeopleEntity p WHERE p.empNo = ?!")
-                    public List<%gt;ComPeopleEntity%lt;> findAll(long sid);
+                    public List<ComPeopleEntity> findAll(long sid);
 
                     // @Query 사용 : native query
                     @Quert(value = "SELECT p.* FROM COM_PEOPLE p WHERE p.emp_no = ?!", native = true)
-                    public List<%gt;ComPeopleEntity%lt;> findAll(long sid);
+                    public List<ComPeopleEntity> findAll(long sid);
                     ```
                 </script>
             </section>
@@ -189,8 +189,8 @@
 
                     @Repository
                     @Transactional(readOnly = true)
-                    public class SimpleJpaRepository%gt;T, ID extends Serializable> implements JpaRepository%gt;T, ID%lt;,
-                    JpaSpecificationExecutor%gt;T%lt; {
+                    public class SimpleJpaRepository<T, ID extends Serializable> implements JpaRepository<T, ID>,
+                    JpaSpecificationExecutor<T> {
                     ```
                 </script>
             </section>
@@ -206,7 +206,7 @@
                         @PersistenceContext(unitName="mainPersistenceUnit")
                         private EntityManager entityManager;
 
-                        public List%gt;ComPeopleEntity%lt; getPerson(int empNo) {
+                        public List<ComPeopleEntity> getPerson(int empNo) {
                             JPAQuery query = new JPAQuery(entityManager);
 
                             ComPeopleEntity entity = query
@@ -251,10 +251,10 @@
             </section>
             <section data-markdown>
                 <script type="text/template">
-                    JPA에서 persistence context에서 DB로의 변경사항 전파는
-                    .flush()가 호출되었을 때 일어난다.
+                    JPA에서 persistence context에서 DB로의 변경사항 전파는 flush()가 호출되었을 때 일어난다.
 
                     flush는 프로그래머가 직접 호출하거나, Transaction이 끝날 때 호출된다.
+
                     hibernate는 connection.commit() 호출 직전에 flush()를 호출함.
                 </script>
             </section>
