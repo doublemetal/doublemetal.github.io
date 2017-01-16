@@ -121,11 +121,11 @@
                     public List<ComPeopleEntity> findBySid(long sid);
 
                     // @Query 사용
-                    @Quert(value = "SELECT p FROM ComPeopleEntity p WHERE p.empNo = ?!")
+                    @Quert(value = "SELECT p FROM ComPeopleEntity p WHERE p.empNo = ?1")
                     public List<ComPeopleEntity> findAll(long sid);
 
                     // @Query 사용 : native query
-                    @Quert(value = "SELECT p.* FROM COM_PEOPLE p WHERE p.emp_no = ?!", native = true)
+                    @Quert(value = "SELECT p.* FROM COM_PEOPLE p WHERE p.emp_no = ?1", native = true)
                     public List<ComPeopleEntity> findAll(long sid);
                     ```
                 </script>
